@@ -1,13 +1,28 @@
 import React from 'react'
 import Banner from '@/components/Banner'
 import Images from '@/contants/images'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import PhotoList from '@/features/Photo/components/PhotoList'
+import { useDispatch } from 'react-redux'
+import { removePhoto } from '@/features/Photo/photoSlice'
 
 const Main = () => {
 	const photos = useSelector((state) => state.photos)
+	// console.log(photos)
+	const dispatch = useDispatch()
+	const navigate = useNavigate()
 
-	console.log(`photos`, photos)
+	const handlePhotoEditClick = (photo) => {
+		const editPhotoId = photo.id
+		navigate(`/photos/${editPhotoId}`)
+	}
+
+	const handlePhotoRemoveClick = (photo) => {
+		console.log('Remove: ', photo)
+		const removePhotoId = photo.id
+		dispatch(removePhoto(removePhotoId))
+	}
 
 	return (
 		<div>
@@ -23,6 +38,12 @@ const Main = () => {
 					Add new photo
 				</Link>
 			</div>
+
+			<PhotoList
+				photoList={photos}
+				onPhotoEditClick={handlePhotoEditClick}
+				onPhotoRemoveClick={handlePhotoRemoveClick}
+			/>
 		</div>
 	)
 }
