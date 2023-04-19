@@ -16,19 +16,24 @@ RandomPhoto.defaultProps = {
 	onRandomButtonBlur: null,
 }
 
-const getRandomImageUrl = () => {
+const getRandomImageUrl = async () => {
 	const randomId = Math.trunc(Math.random() * 2000)
-	return `https://picsum.photos/id/${randomId}/300/300`
+	let url = `https://picsum.photos/id/${randomId}/300/300`
+
+	await fetch(url).then((response) => {
+		if (!response.ok) {
+			url = getRandomImageUrl()
+		}
+	})
+
+	return url
 }
 
 function RandomPhoto({ name, imageUrl, onImageUrlChange, onRandomButtonBlur }) {
-	console.log({ name, imageUrl, onImageUrlChange, onRandomButtonBlur })
-
 	const handleRandomPhotoClick = async () => {
-		console.log('hehe')
-
 		if (onImageUrlChange) {
-			const randomImageUrl = getRandomImageUrl()
+			const randomImageUrl = await getRandomImageUrl()
+
 			onImageUrlChange(randomImageUrl)
 		}
 	}
@@ -43,6 +48,7 @@ function RandomPhoto({ name, imageUrl, onImageUrlChange, onRandomButtonBlur }) {
 					name={name}
 					onClick={handleRandomPhotoClick}
 					onBlur={onRandomButtonBlur}
+					className='mb-3'
 				>
 					Random a photo
 				</Button>

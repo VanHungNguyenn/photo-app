@@ -2,8 +2,13 @@ import React from 'react'
 import Banner from '@/components/Banner'
 import Images from '@/contants/images'
 import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 const Main = () => {
+	const photos = useSelector((state) => state.photos)
+
+	console.log(`photos`, photos)
+
 	return (
 		<div>
 			<Banner

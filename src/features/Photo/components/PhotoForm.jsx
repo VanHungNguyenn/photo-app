@@ -1,24 +1,35 @@
 import React from 'react'
-import { FormGroup, Label, Button } from 'reactstrap'
+import { FormGroup, Label, Button, Spinner } from 'reactstrap'
 import { PHOTO_CATEGORY_OPTIONS } from '@/contants/global'
 import Images from '@/contants/images'
 import { Formik, Form, FastField } from 'formik'
 import InputField from '@/custom-fields/InputField'
 import SelectField from '@/custom-fields/SelectField'
-import RandomPhoto from '@/components/RandomPhoto'
+import RandomPhotoField from '@/custom-fields/RandomPhotoField'
+import * as Yup from 'yup'
 
-const PhotoForm = () => {
+const PhotoForm = ({ onSubmit }) => {
 	const initialValues = {
 		title: '',
 		categoryId: null,
+		photo: Images.COLORFUL_BG,
 	}
 
+	const validationSchema = Yup.object().shape({
+		title: Yup.string().required('This field is required.'),
+		categoryId: Yup.number().required('This field is required.'),
+		photo: Yup.string().required('This field is required.'),
+	})
+
 	return (
-		<Formik initialValues={initialValues}>
+		<Formik
+			initialValues={initialValues}
+			validationSchema={validationSchema}
+			onSubmit={onSubmit}
+		>
 			{(formikProps) => {
 				// do something here
-				const { values, errors, touched } = formikProps
-				console.log({ values, errors, touched })
+				const { values, errors, touched, isSubmitting } = formikProps
 
 				return (
 					<Form>
@@ -35,9 +46,19 @@ const PhotoForm = () => {
 							placeholder='What your photo category?'
 							options={PHOTO_CATEGORY_OPTIONS}
 						/>
-						<RandomPhoto />
+						<FastField
+							name='photo'
+							component={RandomPhotoField}
+							label='Photo'
+						/>
 						<FormGroup>
-							<Button color='primary'>Add to album</Button>
+							<Button type='submit' outline color='primary'>
+								{isSubmitting ? (
+									<Spinner size='sm' />
+								) : (
+									'Add to album'
+								)}
+							</Button>
 						</FormGroup>
 					</Form>
 				)
