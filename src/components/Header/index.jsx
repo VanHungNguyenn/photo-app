@@ -1,18 +1,13 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 
 const Header = () => {
 	return (
-		<header className='header'>
+		<header className='header border-b border-gray-200 shadow-sm'>
 			<div className='max-w-[1200px] mx-auto my-4 flex items-center justify-between'>
-				<a
-					href='https://www.facebook.com/vanhung.dev'
-					className='font-bold text-[20px] text-black'
-					target='_blank'
-					rel='noopener noreferrer'
-				>
+				<Link to='/photos' className='font-bold text-[20px] text-black'>
 					Photo App
-				</a>
+				</Link>
 				<NavLink
 					className={(navData) => {
 						if (navData.isActive) {
@@ -20,10 +15,10 @@ const Header = () => {
 						}
 						return 'font-bold text-[20px] text-black'
 					}}
-					to='/photos'
+					to='/sign-in'
 					end
 				>
-					Redux Project
+					Sign In
 				</NavLink>
 			</div>
 		</header>
